@@ -13,7 +13,6 @@ app.use(express.static('uploads'));
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-
 async function saveFile(buffer, fileName) {
   // const filePath = `./uploads/${fileName}`;
   const filePath = path.join(__dirname, 'uploads', fileName);
@@ -29,37 +28,39 @@ async function saveFile(buffer, fileName) {
 app.post('/upload', upload.single('pdf'), async (req, res) => {
   try {
     const filePath = await saveFile(req.file.buffer, req.file.originalname);
-    res.json({ filePath });
+    return res.json({ filePath });
   } catch (error) {
     console.error('Error uploading file:', error);
-    res.status(500).json({ error: 'Error uploading file' });
+    return res.status(500).json({ error: 'Error uploading file' });
   }
 });
-
 app.get('/pdf/:fileName', (req, res) => {
   const filePath = path.join(__dirname, 'uploads', req.params.fileName);
-  res.sendFile(filePath, (err) => {
+  return res.sendFile(filePath, (err) => {
     if (err) {
       console.error('Error sending file:', err);
-      res.status(500).send('Something went wrong!');
+      if (!res.headersSent) {
+        return res.status(500).send('Something went wrong!');
+      }
     }
   });
 });
 
 app.post('/extract', async (req, res) => {
   const { fileName, selectedPages } = req.body;
+  console.log(selectedPages);
   try {
     const outputPdf = await createNewPdf(fileName, selectedPages);
-    res.json({ success: true, newPdfPath: outputPdf });
+    return res.json({ success: true, newPdfPath: outputPdf });
   } catch (error) {
     console.error('Error extracting pages:', error);
-    res.status(500).json({ error: 'Error extracting pages' });
+    return res.status(500).json({ error: 'Error extracting pages' });
   }
 });
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).send('Something went wrong!');
+  return res.status(500).send('Something went wrong!');
 });
 
 app.listen(port, () => {

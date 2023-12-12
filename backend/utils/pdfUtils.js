@@ -1,5 +1,5 @@
 const fs = require('fs/promises');
-const { PDFDocument, rgb } = require('pdf-lib');
+const { PDFDocument } = require('pdf-lib');
 
 async function saveFile(buffer, fileName) {
   const filePath = `./uploads/${fileName}`;
@@ -13,6 +13,7 @@ async function saveFile(buffer, fileName) {
 }
 
 async function createNewPdf(fileName, selectedPages) {
+  console.log(selectedPages);
   const filePath = `./uploads/${fileName}`;
   const outputFileName = `new_${fileName}`;
   const outputPath = `./uploads/${outputFileName}`;
