@@ -8,7 +8,7 @@ async function saveFile(buffer, fileName) {
     await fs.writeFile(filePath, buffer);
     return filePath;
   } catch (error) {
-    throw new Error('Error saving file: ' + error.message);
+    throw new Error(`Error on saving : ${error.message}`);
   }
 }
 
@@ -19,11 +19,9 @@ async function createNewPdf(fileName, selectedPages) {
   const outputPath = `./uploads/${outputFileName}`;
 
   try {
-    // Read the existing PDF
     const existingPdfBytes = await fs.readFile(filePath);
     const existingPdfDoc = await PDFDocument.load(existingPdfBytes);
 
-    // Create a new PDF with selected pages
     const newPdfDoc = await PDFDocument.create();
     for (const pageNumber of selectedPages) {
       if (pageNumber >= 1 && pageNumber <= existingPdfDoc.getPageCount()) {
@@ -34,13 +32,12 @@ async function createNewPdf(fileName, selectedPages) {
       }
     }
 
-    // Save the new PDF to a file
-    const newPdfBytes = await newPdfDoc.save();
+    const newPdfBytes = await newPdfDoc.save(); //Saving the Pdf file
     await fs.writeFile(outputPath, newPdfBytes);
 
     return outputFileName;
   } catch (error) {
-    throw new Error('Error creating new PDF: ' + error.message);
+    throw new Error(`Error on saving : ${error.message}`);
   }
 }
 

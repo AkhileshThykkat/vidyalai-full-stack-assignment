@@ -1,7 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const cors = require('cors');
-const fs = require('fs/promises'); // Import the 'fs' module for file operations
+const fs = require('fs/promises');
 const { createNewPdf } = require('./utils/pdfUtils.js');
 const path = require('path');
 const app = express();
@@ -15,6 +15,7 @@ const upload = multer({ storage: storage });
 
 async function saveFile(buffer, fileName) {
   // const filePath = `./uploads/${fileName}`;
+  // console.log(filePath)
   const filePath = path.join(__dirname, 'uploads', fileName);
 
   try {
@@ -28,6 +29,7 @@ async function saveFile(buffer, fileName) {
 app.post('/upload', upload.single('pdf'), async (req, res) => {
   try {
     const filePath = await saveFile(req.file.buffer, req.file.originalname);
+    // console.log(filePath);
     return res.json({ filePath });
   } catch (error) {
     console.error('Error uploading file:', error);
@@ -36,6 +38,7 @@ app.post('/upload', upload.single('pdf'), async (req, res) => {
 });
 app.get('/pdf/:fileName', (req, res) => {
   const filePath = path.join(__dirname, 'uploads', req.params.fileName);
+  // console.log(filePath)
   return res.sendFile(filePath, (err) => {
     if (err) {
       console.error('Error sending file:', err);
@@ -48,7 +51,8 @@ app.get('/pdf/:fileName', (req, res) => {
 
 app.post('/extract', async (req, res) => {
   const { fileName, selectedPages } = req.body;
-  console.log(selectedPages);
+  // console.log(fileName)
+  // console.log(selectedPages);
   try {
     const outputPdf = await createNewPdf(fileName, selectedPages);
     return res.json({ success: true, newPdfPath: outputPdf });
