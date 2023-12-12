@@ -14,7 +14,6 @@ Welcome to the .Pdf PDF Extraction and Viewer App! This web application simplifi
 ### Libraries Used:
 
 - **Frontend:**
-  - Pdf-lib for backend PDF manipulation.
   - React-pdf for PDF viewing.
   - Tailwindcss for styling.
 
@@ -24,8 +23,7 @@ Welcome to the .Pdf PDF Extraction and Viewer App! This web application simplifi
 
 ### Notable Consideration:
 
-The styling aspects of the PDF viewer could not be fully completed. However, emphasis was placed on ensuring the proper functionality of the application. Apologies for any inconvenience caused by the aesthetics.
-
+The styling aspects of the PDF viewer could not be fully completed. However, emphasis was placed on ensuring the proper functionality of the application. Apologies for poor styling
 ---
 
 _Note: Ensure that the server is running and accessible at the specified URL before testing the functionalities._
